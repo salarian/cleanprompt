@@ -1,4 +1,4 @@
-[![pytest](https://github.com/cisco-eti/cleanprompt/actions/workflows/pytest.yml/badge.svg)](https://github.com/cisco-eti/cleanprompt/actions/workflows/pytest.yml) [![pre-commit](https://github.com/cisco-eti/cleanprompt/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/cisco-eti/cleanprompt/actions/workflows/pre-commit.yml)
+[![pytest](https://github.com/salarian/cleanprompt/actions/workflows/pytest.yml/badge.svg)](https://github.com/salarian/cleanprompt/actions/workflows/pytest.yml) [![pre-commit](https://github.com/salarian/cleanprompt/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/salarian/cleanprompt/actions/workflows/pre-commit.yml)
 
 # CleanPrompt
 A simple yet frequently used Python utility for safely dedenting and stripping whitespace from LLM prompt strings.

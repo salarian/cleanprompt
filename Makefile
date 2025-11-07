@@ -99,7 +99,6 @@ init: _clean-env update # Initialize the virtual environment.
 
 update: pyproject.toml # Update the conda environment after changes to dependencies.
 > @printf "$(YELLOW)Updating the virtual environment$(NOCOLOR)\n"
-> rm -rf uv.lock  # Removing the lock file make uv slower, but avoids certain corner cases.
 > uv sync --extra dev
 .PHONY: update
 

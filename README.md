@@ -1,32 +1,75 @@
 [![pytest](https://github.com/cisco-eti/cleanprompt/actions/workflows/pytest.yml/badge.svg)](https://github.com/cisco-eti/cleanprompt/actions/workflows/pytest.yml) [![pre-commit](https://github.com/cisco-eti/cleanprompt/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/cisco-eti/cleanprompt/actions/workflows/pre-commit.yml)
 
-# cleanprompt
-Initial commit for the cleanprompt project. **Please edit this file to add the relevant information.**
+# CleanPrompt
+A simple yet frequently used Python utility for safely dedenting and stripping whitespace from LLM prompt strings.
 
-## Notes
-To manage Python environment, we use [uv](https://docs.astral.sh/uv/). Make sure it is installed in your system!
+## The problem
+When building prompts within Python code, multi-line strings (`"""..."""`) are convenient, but they introduce unwanted leading indentation and newlines that can interfere with model tokenization. A naive `textwrap.dedent(s).strip()` works for most simple prompts. However, typing `textwrap.dedent(s).strip()` gets repetitive quite fast. Many developers wrap it in a single function somewhere in their code. Wouldn't it be nice to have this simple function tucked in a small package and use it everywhere? This is what `CleanPrompt` is trying to achieve.
 
-If no upstream repo is defined yet and you are starting from scratch, initialize git and make the initial commit:
-```shell
-git init
-git branch -m main
-git add .
-git commit -m "Initial commit"
+Once we have the familiar `textwrap.dedent(s).strip()` wrapped in a function, in a package, other concerns start to appear: it fails for more complex cases! For example in few-shot prompts, trailing space (e.g., `A: `) is a critical cue for the model.
+
+`CleanPrompt` solves this by providing a set of simple, safe functions to intelligently dedent and strip whitespace, giving you full control over whether to strip leading, trailing, both, or no whitespace at all.
+
+## Installation
+```bash
+pip install cleanprompt
 ```
 
-### Creating the Python environment
-After cloning the repo, run the following command to create the corresponding Python environment and to install project's `pre-commit` hooks:
+## Usage and Examples
+The package provides one main function, `clean()`, and three convenient aliases for common use cases.
 
-```shell
-make init
+---
+### Example 1: Standard Prompt Cleaning (Default)
+
+For most self-contained prompts, you want to remove all code indentation and any surrounding blank lines. The default cleanup_prompt handles this perfectly.
+
+```Python
+import cleanprompt as cp
+
+raw_prompt = """
+
+    You are a helpful assistant.
+    Please summarize the following text:
+
+    ...text...
+
+"""
+
+clean = cp.clean(raw_prompt)
+
+# Result:
+# "You are a helpful assistant.\nPlease summarize the following text:\n\n...text..."
 ```
 
-To activate the environment, run:
+---
 
-```shell
-source .venv/bin/activate
+### Example 2: Preserving Trailing Spaces for Few-Shot Cues
+This is the critical use case. For few-shot prompts, you **must** preserve the trailing space after the final "cue" (e.g., `A: `) to guide the model.
+
+Here, we use `clean_leading` to only strip whitespace from the beginning of the string, leaving the important trailing space untouched.
+
+```Python
+import cleanprompt as cp
+
+raw_few_shot = """
+    Q: What is 2+2?
+    A: 4
+
+    Q: What is the capital of France?
+    A: Paris
+
+    Q: Who was the first US president?
+    A: """
+
+clean = cp.clean_leading(raw_few_shot)
+
+# The clean string correctly ends with "A: "
+assert clean.endswith("A: ")
+
+# Result:
+# "Q: What is 2+2?\nA: 4\n\nQ: What is the capital of France?\nA: Paris\n\nQ: Who was the first US president?\nA: "
 ```
 
-Please notice that using `uv`, the project's package(s) conveniently get installed in the Python environment in [editable mode](https://setuptools.pypa.io/en/latest/userguide/development_mode.html).
+# License
 
-Note: The project structure is based on the [Accord Python Project Template](https://github.com/cisco-eti/Accord-Python-Template). The template makes linting and environment management easy. Look at [developer notes](docs/Developer_notes.md) for more details.
+Distributed under the terms of the [MIT license](https://opensource.org/license/MIT).

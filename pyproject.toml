@@ -1,6 +1,6 @@
 [project]
 name = "cleanprompt"
-description = "Utility to correctly strip the LLM prompts"
+description = "Utility to correctly strip LLM prompts"
 authors = [
   { name="Arash Salarian", email="arash@salarian.com" }
 ]
@@ -70,12 +70,9 @@ testpaths = [ "test" ]
 [tool.mypy]
 ignore_missing_imports = true
 scripts_are_modules = true
-exclude = [ 'wandb/' ]
 
 [tool.ruff]
 line-length = 120
-extend-include = ["*.ipynb"]
-exclude = [".ipynb_checkpoints"]
 
 [tool.ruff.lint]
 select = ["D", "I", "F", "N", "NPY", "RUF"]

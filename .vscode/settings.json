@@ -16,5 +16,8 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "notebook.formatOnSave.enabled": true,
-    "ruff.importStrategy": "fromEnvironment"
+    "ruff.importStrategy": "fromEnvironment",
+    "cSpell.words": [
+        "cleanprompt"
+    ]
 }

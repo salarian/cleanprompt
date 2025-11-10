@@ -26,14 +26,15 @@ def clean(input_prompt: str, strip_mode: StripMode = "both") -> str:
     """
     dedented = textwrap.dedent(input_prompt)
 
-    if strip_mode == "both":
-        return dedented.strip()
-    if strip_mode == "leading":
-        return dedented.lstrip()
-    if strip_mode == "trailing":
-        return dedented.rstrip()
-    if strip_mode == "none":
-        return dedented
+    match strip_mode:
+        case "both":
+            return dedented.strip()
+        case "leading":
+            return dedented.lstrip()
+        case "trailing":
+            return dedented.rstrip()
+        case "none":
+            return dedented
 
     raise ValueError(f"Invalid strip_mode: {strip_mode}")
 

@@ -24,36 +24,6 @@ NOCOLOR := \033[0m
 
 .DEFAULT_GOAL:=help
 
-ifdef OS
-  ifeq ($(OS),Windows_NT)
-    DETECTED_OS := Windows
-    ifeq ($(shell where nvidia-smi),)
-      HAS_CUDA := No
-    else
-      HAS_CUDA := Yes
-    endif
-  else
-    DETECTED_OS := Unknown
-  endif
-else
-  DETECTED_OS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
-  ifeq ($(DETECTED_OS), Darwin)
-    HAS_CUDA := No
-  else
-    ifeq ($(shell which nvidia-smi),)
-      HAS_CUDA := No
-    else
-      HAS_CUDA := Yes
-    endif
-  endif
-endif
-
-ifeq ($(DETECTED_OS), Windows)
-  VENV_ACTIVATE = .venv/Scripts/Activate.ps1
-else
-  VENV_ACTIVATE = set +u; source .venv/bin/activate ; set -u;
-endif
-
 ## Internal targets ##
 
 # Delete and re-create the virtual environment.
@@ -97,7 +67,7 @@ init: _clean-env update # Initialize the virtual environment.
   fi;
 .PHONY: init
 
-update: pyproject.toml # Update the conda environment after changes to dependencies.
+update: pyproject.toml # Update the python environment after changes to dependencies.
 > @printf "$(YELLOW)Updating the virtual environment$(NOCOLOR)\n"
 > uv sync --extra dev
 .PHONY: update

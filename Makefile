@@ -24,6 +24,22 @@ NOCOLOR := \033[0m
 
 .DEFAULT_GOAL:=help
 
+ifdef OS
+  ifeq ($(OS),Windows_NT)
+    DETECTED_OS := Windows
+  else
+    DETECTED_OS := Unknown
+  endif
+else
+  DETECTED_OS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
+
+ifeq ($(DETECTED_OS), Windows)
+  VENV_ACTIVATE = .venv/Scripts/Activate.ps1
+else
+  VENV_ACTIVATE = set +u; source .venv/bin/activate ; set -u;
+endif
+
 ## Internal targets ##
 
 # Delete and re-create the virtual environment.

@@ -16,7 +16,7 @@ pip install cleanprompt
 ```
 
 ## Usage and Examples
-The package provides one main function, `clean()`, and three convenient aliases for common use cases.
+The package provides one main function, `clean()`, and three convenient aliases for common use cases. For a majority of use case, you just want to call the default version (`clean()`).
 
 ---
 ### Example 1: Standard Prompt Cleaning (Default)
@@ -63,7 +63,7 @@ raw_few_shot = """
 
 clean = cp.clean_leading(raw_few_shot)
 
-# The clean string correctly ends with "A: "
+# The clean string correctly ends with "A: ". The final space character is preserved.
 assert clean.endswith("A: ")
 
 # Result:

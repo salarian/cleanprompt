@@ -20,6 +20,7 @@ def test_clean():
 
 
 def test_clean_leading():
+    # case 1: few-shot prompt with leading whitespace
     """Test clean_leading function."""
     raw_few_shot = """
         Q: What is 2+2?
@@ -35,6 +36,21 @@ def test_clean_leading():
     assert clean.startswith("Q: What is 2+2?")
     assert clean.endswith("A: ")
     assert not cp.clean(raw_few_shot).endswith("A: ")
+
+    # case 2: prompt with trailing whitespace
+    raw_prompt = """
+
+
+        Here begins the epic poem:
+
+        [The model should start writing here]
+
+
+        """
+
+    clean = cp.clean_leading(raw_prompt)
+    assert clean.startswith("Here begins")
+    assert clean.endswith("here]\n\n\n")
 
 
 def test_clean_trailing():
@@ -52,4 +68,4 @@ def test_clean_trailing():
     clean = cp.clean_trailing(raw_prompt)
     assert not cp.clean(raw_prompt).startswith("\n\n\nHere begins")
     assert clean.startswith("\n\n\nHere begins")
-    assert not clean.endswith("\n")
+    assert clean.endswith("here]")
